@@ -34,8 +34,9 @@ def imagesToCSV(path):
         pixelStringVec.append(pixelString)
     df = pd.DataFrame({'image':nameVec, 'format':formatVec, 'width':widthVec, 'height':heightVec, 'values':pixelStringVec}, columns=columns)
     print(df)
-    return(df)
+    df.to_csv(path+"/images.csv")
 
-
-path="C:/Users/Vladimir/Desktop/Mickey Dataset/V1/Test2"
+path='C:/Users/Vladimir/Desktop/Mickey Dataset/V1/Test2'
 imagesToCSV(path)
+
+
