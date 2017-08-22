@@ -4,39 +4,38 @@ import pandas as pd
 import os
 
 
-#class ImageToCSVTool:
+class ImageToCSVTool:
 
-def imagesToCSV(path):
-    columns=['image','format', 'width', 'height', 'values']
-    nameVec=[]
-    formatVec=[]
-    widthVec=[]
-    heightVec=[]
-    pixelStringVec=[]
-    for file in os.listdir(path):
-        nameVec.append(file[:-4])
-        formatVec.append(file[-3:])
-        width=0
-        height=0
-        print(file)
-        pixelString=""
-        img = Image.open(path + "/" + file)
-        imgarray = numpy.array(img)
-        heightVec.append(len(imgarray))
-        widthVec.append(len(imgarray[0]))
-        for line in range(len(imgarray)):
-            for column in range(len(imgarray[line])):
-                pixelValue=imgarray[line][column]
-                if column==0 & line==0:
-                    pixelString=pixelString + str(pixelValue)
-                else:
-                    pixelString=pixelString + " " + str(pixelValue)
-        pixelStringVec.append(pixelString)
-    df = pd.DataFrame({'image':nameVec, 'format':formatVec, 'width':widthVec, 'height':heightVec, 'values':pixelStringVec}, columns=columns)
-    print(df)
-    df.to_csv(path+"/images.csv")
 
-path='C:/Users/Vladimir/Desktop/Mickey Dataset/V1/Test2'
-imagesToCSV(path)
+    #creates a CSV file containing images from a folder
+    def imagesToCSV(path):
+        columns = ['image','format', 'width', 'height', 'values']
+        nameVec = []
+        formatVec = []
+        widthVec = []
+        heightVec = []
+        pixelStringVec = []
+        for file in os.listdir(path):
+            fileName = os.path.splitext(file)[0]
+            fileFormat = os.path.splitext(file)[1]
+            nameVec.append(fileName)
+            formatVec.append(fileFormat)
+            print(file)
+            pixelString = ""
+            img = Image.open(path + "/" + file)
+            imgarray = numpy.array(img)
+            heightVec.append(len(imgarray))
+            widthVec.append(len(imgarray[0]))
+            for line in range(len(imgarray)):
+                for column in range(len(imgarray[line])):
+                    pixelValue = imgarray[line][column]
+                    if column == 0 & line == 0:
+                        pixelString=pixelString + str(pixelValue)
+                    else:
+                        pixelString=pixelString + " " + str(pixelValue)
+            pixelStringVec.append(pixelString)
+        df = pd.DataFrame({'image':nameVec, 'format':formatVec, 'width':widthVec, 'height':heightVec, 'values':pixelStringVec}, columns=columns)
+        print(df)
+        df.to_csv(path+"/images.csv")
 
 
