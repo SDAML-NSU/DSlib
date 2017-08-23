@@ -6,9 +6,9 @@ import os
 
 class ImageToCSVTool:
 
-
     #creates a CSV file containing images from a folder
-    def imagesToCSV(path):
+    #fileName is the name of the CSV file. By default images
+    def imagesToCSV(path, fileName="images"):
         columns = ['image','format', 'width', 'height', 'values']
         nameVec = []
         formatVec = []
@@ -36,6 +36,6 @@ class ImageToCSVTool:
             pixelStringVec.append(pixelString)
         df = pd.DataFrame({'image':nameVec, 'format':formatVec, 'width':widthVec, 'height':heightVec, 'values':pixelStringVec}, columns=columns)
         print(df)
-        df.to_csv(path+"/images.csv")
+        df.to_csv(path+"/%s.csv" % fileName)
 
 

@@ -9,15 +9,14 @@ class ExtractMarkupTool(object):
     def __init__(self, csv_path):
         self.csv_path = csv_path
 
-    #Removes the characters that are not used afterwards
-    #Argument x_y stands for a charecter (x or y) that will be deleted
+    #Removes the characters in the csv file that are not used afterwards
+    #Argument x_y stands for which coordinate (x or y) will be also removed
     def removeChar(self, element, x_y):
         element = element.replace('_%s":' % x_y, "")
         element = element.replace(',"', "")
         element = element.replace('[', "")
         element = element.replace(']', "")
         return element
-
 
     # Imports the .csv file extracted from VGG Image Annotator. Works for sure with only one region per frame.
     # Unfortunately, there are a lots of syntaxes that I could not use without deleting them to make the data usable
@@ -69,7 +68,8 @@ class ExtractMarkupTool(object):
 
         return file_names, xList, yList
 
-    # Creates a polygon used by the Image Draw module. Converts the (x1, x2, ...), (y1, y2, ...) input in ((x1,y1),(x2,y2)) format
+    # Creates a polygon used by the Image Draw module.
+    # Converts the (x1, x2, ...), (y1, y2, ...) input in ((x1,y1),(x2,y2)) format
     def makePolygon(xList, yList):
 
         polygon = []

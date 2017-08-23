@@ -20,7 +20,8 @@ class CollectTool:
             count += 1
 
     # Captures frames from all the videos in a folder using captureFramesfromVideo
-    def allVids(self, inputPath, outputPath):
+    # By default, outputPath=inputPath
+    def allVids(self, inputPath, outputPath=''):
         if outputPath == "":
             outputPath = inputPath
         for file in os.listdir(inputPath):
