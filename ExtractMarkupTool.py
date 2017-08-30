@@ -22,20 +22,19 @@ class ExtractMarkupTool(object):
     # Unfortunately, there are a lots of syntaxes that I could not use without deleting them to make the data usable
     def import_csv(self):
         data = pd.read_csv(self.csv_path)
-
         # Deletes images that are not labelled in the .csv file
         data = data[data.values[:, self.CSV_COLUMN_INDEX_REGION_SHAPE_ATTRIBUTES] != "{}"]
 
-        data = pd.DataFrame(data.values[:, self.CSV_COLUMN_INDEX_REGION_SHAPE_ATTRIBUTES],
-                             data.values[:, self.CSV_COLUMN_INDEX_IMAGE_NAME])
-
-        file_names = [data.values[:, self.CSV_COLUMN_INDEX_IMAGE_NAME]]
+        data = pd.DataFrame({'coordinates':data.values[:, self.CSV_COLUMN_INDEX_REGION_SHAPE_ATTRIBUTES],
+                             'filename':data.values[:, self.CSV_COLUMN_INDEX_IMAGE_NAME]})
+        file_names = [data.values[:, 1]]
+        print(file_names)
         x = []
         y = []
 
         # Making the format readable
         for row in range(len(data)):
-            file_names.append(data.values[row, 0].split(",")[0])
+            file_names.append(data.values[row, 1].split(",")[0])
             x.append(data.values[row, 0].split("all_points")[1])
             y.append(data.values[row, 0].split("all_points")[2])
 
@@ -44,7 +43,7 @@ class ExtractMarkupTool(object):
 
         # Making a list of x coordinates for each images
         for element in range(len(x)):
-            self.removeChar(x[element], 'x')
+            x[element]=self.removeChar(x[element], 'x')
 
         # Splitting them
         for element in x:
@@ -57,7 +56,9 @@ class ExtractMarkupTool(object):
 
         # Same for the y coordinates
         for element in range(len(y)):
-            self.removeChar(y[element], 'y')
+            y[element]=self.removeChar(y[element], 'y')
+            y[element]=y[element].replace("}", "")
+
 
         for element in y:
             yList.append(element.split(",", ))
@@ -66,12 +67,15 @@ class ExtractMarkupTool(object):
             for value in range(len(element)):
                 element[value] = int(element[value])
 
+
+        #print("filename : ", file_names)
+        #print("xList : ", xList)
+        #print("yList : ", yList)
         return file_names, xList, yList
 
     # Creates a polygon used by the Image Draw module.
     # Converts the (x1, x2, ...), (y1, y2, ...) input in ((x1,y1),(x2,y2)) format
-    def makePolygon(xList, yList):
-
+    def makePolygon(self, xList, yList):
         polygon = []
         for value in range(len(xList)):
             tuple = (xList[value], yList[value])
@@ -88,7 +92,9 @@ class ExtractMarkupTool(object):
         return mask
 
     # Crops the image contained in the region
-    def cropPictures(self, images, pathOriginal, pathSave):
+    def cropPictures(self, images, pathOriginal, pathSave=''):
+        if pathSave=='':
+            pathSave=pathOriginal
         for picture in range(len(images[1])):
             original = Image.open(pathOriginal + "/" + images[0][0][picture])
             mask = self.getMask(images, picture, original)
@@ -96,7 +102,9 @@ class ExtractMarkupTool(object):
             diff.save(pathSave + "/" + images[0][0][picture], "JPEG")
 
     # Creates a bounding box around the cropped image to keep only the "Not white only" area of the picture
-    def centering(self, imgName, pathOriginal, pathSave):
+    def centering(self, imgName, pathOriginal, pathSave=''):
+        if pathSave=='':
+            pathSave=pathOriginal
         image = Image.open(pathOriginal + "/" + imgName)
         # An inverted copy of the image is created as getbbox works on black areas.
         invert_image = ImageOps.invert(image)
