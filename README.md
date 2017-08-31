@@ -1,13 +1,13 @@
-#P2P Dataset Creation Tool
+# P2P Dataset Creation Tool
 
 
 
 
 This repository consists in several scripts used to create a pix2pix dataset. It performs the following tasks :
-*Capturing frames from a video (CollectTool.py)
-*Cutting areas labelled using VGG Image Annotator (http://www.robots.ox.ac.uk/~vgg/software/via/) and crop the bounding box around that area (ExtractMarkupTool.py)
-*Extract a feature from an image (edges, greyscale, or pairing images) and put them in the "Input - Output" format required for pix2pix (FeatureExtraction.py)
-*Convert the set of images into CSV format (ImagesToCSVTool.py)
+* Capturing frames from a video (CollectTool.py)
+* Cutting areas labelled using VGG Image Annotator (http://www.robots.ox.ac.uk/~vgg/software/via/) and crop the bounding box around that area (ExtractMarkupTool.py)
+* Extract a feature from an image (edges, greyscale, or pairing images) and put them in the "Input - Output" format required for pix2pix (FeatureExtraction.py)
+* Convert the set of images into CSV format (ImagesToCSVTool.py)
 
 
 
